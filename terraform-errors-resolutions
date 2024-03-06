@@ -1,0 +1,96 @@
+terraform errors
+
+╷
+│ Error: Invalid default value for variable
+│ 
+│   on variables.tf line 4, in variable "external_port":
+│    4:   default = 1920
+│ 
+│ This default value is not compatible with the variable's type constraint: list of any single type required.
+╵
+Solution - external_port was declared as a list but default was set to a number. comment out default
+variable "external_port" {
+  type = list
+  #default = 1920
+}
+
+
+**************************************************************************************************
+
+Error - Terraform plan failing with new Cloud9 environment
+
+
+beltus-dev:~/environment/terraform-aws $ terraform plan
+Running plan in Terraform Cloud. Output will stream here. Pressing Ctrl-C
+will stop streaming the logs, but will not stop the plan running remotely.
+
+Preparing the remote plan...
+
+To view this run in a browser, visit:
+https://app.terraform.io/app/BCA-Ventures/morethanterraform-dev/runs/run-KoPpJenmsAYJKGvz
+
+Waiting for the plan to start...
+
+Terraform v1.6.6
+on linux_amd64
+Initializing plugins and modules...
+╷
+│ Error: No valid credential sources found
+│ 
+│   with provider["registry.terraform.io/hashicorp/aws"],
+│   on providers.tf line 10, in provider "aws":
+│   10:   provider "aws" {
+│ 
+│ Please see https://registry.terraform.io/providers/hashicorp/aws
+│ for more information about providing credentials.
+│ 
+│ Error: failed to refresh cached credentials, no EC2 IMDS role found,
+│ operation error ec2imds: GetMetadata, request canceled, context deadline
+│ exceeded
+│ 
+╵
+Operation failed: failed running terraform plan (exit 1)
+
+**************************************************************************************************
+ Error: Retrieving AWS account details: validating provider credentials: retrieving caller
+ identity from STS: operation error STS: GetCallerIdentity, https response error StatusCode: 403, RequestID: cad6d9e2-efe7-4d7a-96ec-66e572f908cb,
+ api error InvalidClientTokenId: The security token included in the request is invalid.  │   with provider["registry.terraform.io/hashicorp/aws"],
+│   on providers.tf line 10, in provider "aws":
+│   10:   provider "aws" {
+
+
+Solution 
+
+- Invalid AWS Credential were being supplied
+- go into AWS IAM and find user.
+- Then get access key for that user and use it.
+- if you don't have access key secret, generate new key
+- update in aws credentials or terraform files
+- create terraform profile if necessary.
+
+**********************************************************************************************************************************
+
+Error: Invalid index
+│ 
+│   on main.tf line 18, in resource "docker_container" "nodered_container":
+│   18:   name = join("-", ["notered_container", random_string.randomString[count.index].result])
+│     ├────────────────
+│     │ count.index is 2
+│     │ random_string.randomString is tuple with 2 elements
+│ 
+│ The given key does not identify an element in this collection value: the given index is greater than or equal to the length of the
+│ collection.
+╵
+
+randomString.count was set to 2. Changed to 3 and it worked. container_count.default is 3.
+resource "random_string" "randomString" {
+  count = 3
+  length = 4
+  special = false
+  upper = false
+}
+
+variable "container_count" {
+  type = number
+  default = 3
+}

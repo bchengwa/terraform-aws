@@ -1,0 +1,8 @@
+- type terraform login
+- enter yes and go to login page and enter login credentials
+- A page will be prompted to create an API token.
+= Select create API token.
+- A token will be created and stored in C:\Users\bchen\AppData\Roaming\terraform.d\credentials.tfrc
+- Current token is bGxcvrWZCKwoiA.atlasv1.T06kzhkmvPDWOHR9V7h7AQIh1lKUjTYNzM7W4OiEXqK7GOvPhqkAftGnNiEyCa7DLmA
+
+Documentation: terraform.io/docs/cloud

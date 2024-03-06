@@ -1,0 +1,53 @@
+IPV4 Subnetting
+
+
+2^7			2^6			2^5			2^4			2^3			2^2			2^1			2^0			- Exponent
+128			64			32			16			8			4			2			1			- Decimal
+10000000	01000000	00100000	00010000	00001000	00000100	00000010	00000001	- Binary
+
+
+Bits - smallest number represented. 1s and 0s
+Bytes - groups of 8 bits. Ex 11001001
+Octets - groupings bytes. Ex 11010001	11001101	11111001	11001111 - 4 octets
+
+
+Converting from decimal to binary. Ex 197
+
+- start with the highest decimal that can be subtracted from 197. For 197 it is 128
+197 - 128 = 69. Thus 2^7 gets a 1
+10000000
+
+- Next highest decimal that can be subtracted from 69 = 64
+69 - 64 = 5. Thus 2^6 gets a 1
+11000000
+
+- Next highest decimal that can be subtracted from 5 = 4
+5 - 4 = 1. Thus 2^2 gets a 1
+11000100
+
+- Only number left is 1 which is 2^0
+Thus 2^0 gets a 1
+
+Binary 11000101 = Decimal 197
+
+
+10101010 = 2 + 8 + 32 + 128 = 170
+10001101 = 1 + 4 + 8 + 128 = 141
+10010111 = 1 + 2 + 4 + 16 + 128 = 151
+01010101 = 1 + 4 + 16 + 64 = 85
+100101 = 1 + 4 + 32 = 37
+
+125 = 125 - 64 = 61; 61 - 32 = 29; 29 = 16 = 15; 15 -8 = 7; 7 - 4 = 3; 3 - 2 = 1; 1 - 1 = 0;
+125 = 01111111
+
+63 = 64 - 63 = 1; 1 - 1 = 0
+63 = 00100001
+
+48 = 48 - 32 = 16; 16 - 16 = 0
+48 = 00110000
+
+250 = 250 - 128 = 122; 122 - 64 = 58; 58 - 32 = 26; 26 - 16 = 10; 10 - 8 = 2; 2 - 2 = 0;
+250 = 11111010
+
+3608 = 3608 = 2056 = 1452; 1452 - 1028 = 424; 424 - 256 = 168; 168 - 128 = 40; 40 - 32 = 8; 8 - 8 = 0;
+3608 = 110110101000

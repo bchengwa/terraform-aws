@@ -1,0 +1,88 @@
+Terraform top level blocks
+Terraform Settings	- Fundamentals Block
+	- Mandatory and introduced in 0.13 version
+	- Terraform behaviors, terraform version, provider requirements, backend
+	- Only constants can be used in terraform block. arguments cannot refer to resources, variables, built-in function, etc.
+
+terraform {
+
+	# This block is resolved during terraform init command
+	required_version = "0.15.1"  # or "~>0.15.1" always use 3-digit version. Never use 2 digit
+	
+	required_providers {        //Provider Requirements, Provider Configuration, Dependency Lock File
+		aws = { //"aws" is the local name and must be used in the provider section to reference provider. Terraform ALWAYS uses local name to reference provider outside of required_providers block
+			source = "hashicorp/aws"
+			version = "~> 3.21"
+		}
+	}
+	
+	# Where terraform backend information is stored
+	backend "s3" {
+		bucket	= "s3terraform"
+		key	= "path/to/key"
+		region	= "us-east-1"
+	}
+	
+	
+}
+
+provider = "aws" {
+	Profile = "default"    //use local credentials to connect to aws
+	Region = "us-east-1"
+	#Can define static credentials here. Access key/secret access key. This is not recommended.
+	#Can specify a credentials file here. Like below
+	Shared_credentials_file = "/*/*/creds"
+	Profile                            = "customprofile"
+	Profile = "default"
+}
+
+
+
+Version Constraints
+	- Can be used in modules, required providers, and required version in terraform settings.
+	- = (or no operator): Allows only one exact version number. Cannot be combined with other conditions.
+	- !=: Excludes an exact version number.
+	- >, >=, <, <=: Comparisons against a specified version, allowing versions for which the comparison is true. "Greater-than" requests newer versions, and "less-than" requests older versions.
+	- ~>: Allows only the rightmost version component to increment. For example, to allow new patch releases within a specific minor release, use the full version number: ~> 1.0.4 will allow installation of 1.0.5 and 1.0.10 but not 1.1.0. This is usually called the pessimistic constraint operator.
+
+
+Providers			- Fundamentals Block
+	Heart of terraform; provider interacts with remote systems
+Resources			- Fundamentals Block
+	Resource blocks describes one or more infrastructure objects.
+Input Variables		- Variables Block
+Output Values		- Variables Block
+Locals Values		- Variables Block
+Data Sources		- Calling/Referencing Block
+Modules				- Calling/Referencing Block
+
+A module is a separate .tf file that contains a collection of resources. The module can then be referenced in the main.tf to retrieve the resources.
+
+
+- Taining a resource - Destroying a resourse and re-applying the changes.
+terraform taint <resource>
+terraform untaint <resource>
+
+- state locking and breaking state. when doing terraform apply, default is -lock=true meaning state file is locked when applying. Try with -lock=false to break state
+terraform apply --auto-approve -lock=false
+terraform apply --auto-approve
+- avoid having an unlocked state. or fix it with terraform refresh
+- use terraform destroy followed by docker ps -a and delete remaining resources.then destroy again.
+- use terraform import to add additional resource into the state (.tf) then you can destroy it.
+
+- terraform refresh and state rm
+refresh state if terraform resource is manually removed from the environment.
+Ex terraform apply; docker ps -a; terraform state rm; terraform refresh to sync up env.
+
+Terraform variables
+- If default value is not provided, will be promted for value on plan, apply, destroy.
+- can supply value with plan command
+	- terraform plan -var external_port=2000
+- can also export an environmental variable to assign to the variable
+	- export TF_VAR_external_port=2000; terraform plan
+- or add a default in .tf file
+	variable "external_port" {
+		type = number
+		default = 1920
+	}
+	
